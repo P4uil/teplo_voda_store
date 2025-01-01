@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teplo_voda_store/components/tabbar/bloc/tabbar_bloc.dart';
+import 'package:teplo_voda_store/pages/catalog/bloc/catalog_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StoreView extends StatefulWidget {
@@ -11,6 +12,20 @@ class StoreView extends StatefulWidget {
 }
 
 class _StoreViewState extends State<StoreView> {
+  final List<Map<String, String>> sections = [
+    {'title': 'Канализация', 'icon': 'assets/icons/sewage.png'},
+    {'title': 'Задвижки', 'icon': 'assets/icons/valves.png'},
+    {'title': 'Краны', 'icon': 'assets/icons/taps.png'},
+    {'title': 'Полипропилен', 'icon': 'assets/icons/polypropylene.png'},
+    {'title': 'Полиэтилен', 'icon': 'assets/icons/polyethylene.png'},
+    {'title': 'Теплый пол', 'icon': 'assets/icons/heated_floor.png'},
+    {'title': 'Хомуты', 'icon': 'assets/icons/clamps.png'},
+    {'title': 'Крепления', 'icon': 'assets/icons/fasteners.png'},
+    {'title': 'Пол - сушители', 'icon': 'assets/icons/towel_racks.png'},
+    {'title': 'Трубы', 'icon': 'assets/icons/pipes.png'},
+    {'title': 'Утеплитель', 'icon': 'assets/icons/insulation.png'},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +55,6 @@ class _StoreViewState extends State<StoreView> {
       ),
       body: Column(
         children: [
-          // Строка поиска
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: InkWell(
@@ -61,16 +75,12 @@ class _StoreViewState extends State<StoreView> {
                   children: [
                     Icon(Icons.search, color: Colors.grey),
                     SizedBox(width: 8),
-                    Text(
-                      'Поиск',
-                      style: TextStyle(color: Colors.grey),
-                    ),
+                    Text('Поиск', style: TextStyle(color: Colors.grey)),
                   ],
                 ),
               ),
             ),
           ),
-          // Плашка "Заказать по телефону"
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: InkWell(
@@ -116,33 +126,77 @@ class _StoreViewState extends State<StoreView> {
                 );
               },
               child: Container(
+                width: double.infinity,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.phone, color: Colors.white),
-                    SizedBox(width: 8),
-                    Text(
-                      'Заказать по телефону',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
+                child: Center(
+                  child: const Text(
+                    'Оформить заказ по телефону',
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center, // Текст выровнен по центру
+                  ),
                 ),
               ),
             ),
-          )
+          ),
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(16.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                childAspectRatio: 1,
+              ),
+              itemCount: sections.length,
+              itemBuilder: (context, index) {
+                final section = sections[index];
+                return InkWell(
+                  onTap: () {
+                    context
+                        .read<CatalogBloc>()
+                        .add(SelectCatalogSectionEvent(section['title']!));
+                    context
+                        .read<TabBarBloc>()
+                        .add(SwitchTabEvent(1)); // Переключиться на "Каталог"
+                  },
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.grey[200],
+                            image: DecorationImage(
+                              image: AssetImage(section['icon']!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(section['title']!, textAlign: TextAlign.center),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
   }
 
-  void launchPhoneDialer(String phoneNumber) {
+  void launchPhoneDialer(String phoneNumber) async {
     final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
-    launchUrl(phoneUri);
+    if (await canLaunch(phoneUri.toString())) {
+      await launch(phoneUri.toString());
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
   }
 }
