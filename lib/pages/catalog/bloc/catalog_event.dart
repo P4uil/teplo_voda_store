@@ -1,17 +1,20 @@
-part of 'catalog_bloc.dart';
+part of catalog_bloc;
 
-sealed class CatalogEvent extends Equatable {
+// Events
+abstract class CatalogEvent extends Equatable {
   const CatalogEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-final class SelectCatalogSectionEvent extends CatalogEvent {
+class SelectCatalogSectionEvent extends CatalogEvent {
   final String sectionTitle;
 
   const SelectCatalogSectionEvent(this.sectionTitle);
 
   @override
-  List<Object> get props => [sectionTitle];
+  List<Object?> get props => [sectionTitle];
 }
+
+class BackToCatalogEvent extends CatalogEvent {}

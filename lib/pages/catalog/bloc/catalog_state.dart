@@ -1,19 +1,20 @@
-part of 'catalog_bloc.dart';
+part of catalog_bloc;
 
-sealed class CatalogState extends Equatable {
+// States
+abstract class CatalogState extends Equatable {
   const CatalogState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-final class CatalogInitial extends CatalogState {}
+class CatalogInitial extends CatalogState {}
 
-final class CatalogSectionSelected extends CatalogState {
+class CatalogSectionSelected extends CatalogState {
   final String sectionTitle;
 
   const CatalogSectionSelected(this.sectionTitle);
 
   @override
-  List<Object> get props => [sectionTitle];
+  List<Object?> get props => [sectionTitle];
 }

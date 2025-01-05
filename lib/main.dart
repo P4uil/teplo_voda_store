@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teplo_voda_store/components/tabbar/bloc/tabbar_bloc.dart';
+import 'package:teplo_voda_store/pages/catalog/bloc/catalog_bloc.dart';
 import 'package:teplo_voda_store/pages/auth/auth_view.dart';
 
 void main() {
@@ -10,9 +13,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: AuthView(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => TabBarBloc()),
+        BlocProvider(create: (context) => CatalogBloc()),
+      ],
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: AuthView(),
+      ),
     );
   }
 }

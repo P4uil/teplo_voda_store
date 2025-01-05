@@ -21,7 +21,7 @@ class _StoreViewState extends State<StoreView> {
     {'title': 'Теплый пол', 'icon': 'assets/icons/heated_floor.png'},
     {'title': 'Хомуты', 'icon': 'assets/icons/clamps.png'},
     {'title': 'Крепления', 'icon': 'assets/icons/fasteners.png'},
-    {'title': 'Пол - сушители', 'icon': 'assets/icons/towel_racks.png'},
+    {'title': 'Полотенцесушители', 'icon': 'assets/icons/towel_racks.png'},
     {'title': 'Трубы', 'icon': 'assets/icons/pipes.png'},
     {'title': 'Утеплитель', 'icon': 'assets/icons/insulation.png'},
   ];
@@ -77,68 +77,6 @@ class _StoreViewState extends State<StoreView> {
                     SizedBox(width: 8),
                     Text('Поиск', style: TextStyle(color: Colors.grey)),
                   ],
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: InkWell(
-              onTap: () {
-                // Открыть выезжающее окно
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (BuildContext context) {
-                    return Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            'Сделайте заказ по телефону',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Оформите доставку или самовывоз из магазина',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          const SizedBox(height: 16),
-                          // Кнопка растянутая на всю ширину
-                          ElevatedButton(
-                            onPressed: () {
-                              launchPhoneDialer('+77054109814');
-                            },
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(double.infinity, 48),
-                            ),
-                            child: const Text('Связаться с менеджером'),
-                          ),
-                          const SizedBox(height: 24),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-              child: Container(
-                width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
-                  child: const Text(
-                    'Оформить заказ по телефону',
-                    style: TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center, // Текст выровнен по центру
-                  ),
                 ),
               ),
             ),
