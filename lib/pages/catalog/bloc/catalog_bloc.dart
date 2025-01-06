@@ -10,11 +10,17 @@ part 'catalog_state.dart';
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   CatalogBloc() : super(CatalogInitial()) {
     on<SelectCatalogSectionEvent>((event, emit) {
-      emit(CatalogSectionSelected(event.sectionTitle)); // Переход в раздел
+      if (event.sectionTitle == 'Канализация') {
+        emit(CatalogSectionContent(
+            event.sectionTitle)); // Переход в раздел "Канализация"
+      } else {
+        emit(CatalogSectionSelected(
+            event.sectionTitle)); // Для остальных разделов
+      }
     });
 
     on<BackToCatalogEvent>((event, emit) {
-      emit(CatalogInitial()); // Возврат в каталог
+      emit(CatalogInitial()); // Возврат к каталогу
     });
   }
 }

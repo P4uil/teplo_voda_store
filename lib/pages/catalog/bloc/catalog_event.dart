@@ -1,6 +1,5 @@
 part of catalog_bloc;
 
-// Events
 abstract class CatalogEvent extends Equatable {
   const CatalogEvent();
 

@@ -17,32 +17,33 @@ class CatalogView extends StatelessWidget {
                 ListTile(
                   title: const Text('Канализация'),
                   onTap: () {
-                    context.read<CatalogBloc>().add(SelectCatalogSectionEvent(
-                        'Канализация')); // Открыть раздел
+                    context
+                        .read<CatalogBloc>()
+                        .add(SelectCatalogSectionEvent('Канализация'));
                   },
                 ),
                 ListTile(
                   title: const Text('Задвижки'),
                   onTap: () {
-                    context.read<CatalogBloc>().add(SelectCatalogSectionEvent(
-                        'Задвижки')); // Открыть раздел
+                    context
+                        .read<CatalogBloc>()
+                        .add(SelectCatalogSectionEvent('Задвижки'));
                   },
                 ),
                 // Добавьте остальные разделы...
               ],
             ),
           );
-        } else if (state is CatalogSectionSelected) {
+        } else if (state is CatalogSectionContent) {
           return Scaffold(
             appBar: AppBar(
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
-                  // Вернуться в каталог
                   context.read<CatalogBloc>().add(BackToCatalogEvent());
                 },
               ),
-              title: Text(state.sectionTitle), // Название раздела
+              title: Text(state.sectionTitle),
             ),
             body: Center(
               child: Text('Содержимое раздела: ${state.sectionTitle}'),

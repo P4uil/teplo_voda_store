@@ -13,17 +13,9 @@ class StoreView extends StatefulWidget {
 
 class _StoreViewState extends State<StoreView> {
   final List<Map<String, String>> sections = [
-    {'title': 'Канализация', 'icon': 'assets/icons/sewage.png'},
-    {'title': 'Задвижки', 'icon': 'assets/icons/valves.png'},
-    {'title': 'Краны', 'icon': 'assets/icons/taps.png'},
-    {'title': 'Полипропилен', 'icon': 'assets/icons/polypropylene.png'},
-    {'title': 'Полиэтилен', 'icon': 'assets/icons/polyethylene.png'},
-    {'title': 'Теплый пол', 'icon': 'assets/icons/heated_floor.png'},
-    {'title': 'Хомуты', 'icon': 'assets/icons/clamps.png'},
-    {'title': 'Крепления', 'icon': 'assets/icons/fasteners.png'},
-    {'title': 'Полотенцесушители', 'icon': 'assets/icons/towel_racks.png'},
-    {'title': 'Трубы', 'icon': 'assets/icons/pipes.png'},
-    {'title': 'Утеплитель', 'icon': 'assets/icons/insulation.png'},
+    {'title': 'Канализация', 'icon': 'assets/icons/na.png'},
+    {'title': 'Задвижки', 'icon': 'assets/icons/na.png'},
+    // Добавьте остальные разделы...
   ];
 
   @override
@@ -44,7 +36,7 @@ class _StoreViewState extends State<StoreView> {
               child: const Row(
                 children: [
                   Text(
-                    '+7 705 410 9814',
+                    '+7 705 410 98 14',
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                 ],
@@ -95,12 +87,13 @@ class _StoreViewState extends State<StoreView> {
                 final section = sections[index];
                 return InkWell(
                   onTap: () {
-                    context
-                        .read<CatalogBloc>()
-                        .add(SelectCatalogSectionEvent(section['title']!));
+                    final title = section['title'];
                     context
                         .read<TabBarBloc>()
-                        .add(SwitchTabEvent(1)); // Переключиться на "Каталог"
+                        .add(SwitchTabEvent(1)); // Каталог
+                    context
+                        .read<CatalogBloc>()
+                        .add(SelectCatalogSectionEvent(title!));
                   },
                   child: Column(
                     children: [
