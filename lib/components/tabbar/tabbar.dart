@@ -16,7 +16,6 @@ class TabBarBloc extends Bloc<TabBarEvent, TabBarState> {
   }
 }
 
-/// Главный виджет TabBar
 class TabBarViewWidget extends StatelessWidget {
   const TabBarViewWidget({super.key});
 
@@ -32,12 +31,16 @@ class TabBarViewWidget extends StatelessWidget {
           builder: (context, state) {
             return IndexedStack(
               index: state.selectedIndex,
-              children: const [
-                StoreView(),
-                CatalogView(),
-                SearchView(),
-                CartView(),
-                ProfileView(),
+              children: [
+                const StoreView(),
+                CatalogView(
+                  onSectionSelected: (index) {
+                    context.read<TabBarBloc>().add(SwitchTabEvent(index));
+                  },
+                ),
+                const SearchView(),
+                const CartView(),
+                const ProfileView(),
               ],
             );
           },

@@ -1,110 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:teplo_voda_store/pages/cart/cart_view.dart';
 import 'package:teplo_voda_store/pages/catalog/catalog_view.dart';
+import 'package:teplo_voda_store/pages/cart/cart_view.dart';
+import 'package:teplo_voda_store/pages/catalog/pages/sewerage.dart';
 import 'package:teplo_voda_store/pages/profile/profile_view.dart';
 import 'package:teplo_voda_store/pages/search/search_view.dart';
 import 'package:teplo_voda_store/pages/store/store_view.dart';
-import 'package:teplo_voda_store/components/tabbar/bloc/tabbar_bloc.dart' as bloc;
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => bloc.TabBarBloc(),
-      child: Scaffold(
-        body: BlocBuilder<bloc.TabBarBloc, bloc.TabBarState>(
-          builder: (context, state) {
-            return IndexedStack(
-              index: state.selectedIndex,
-              children: [
-                _buildTabContent(0), // Главная
-                _buildTabContent(1), // Каталог
-                _buildTabContent(2), // Поиск
-                _buildTabContent(3), // Корзина
-                _buildTabContent(4), // Профиль
-              ],
-            );
-          },
-        ),
-        bottomNavigationBar: BlocBuilder<bloc.TabBarBloc, bloc.TabBarState>(
-          builder: (context, state) {
-            return BottomNavigationBar(
-              currentIndex: state.selectedIndex,
-              onTap: (index) {
-                context.read<bloc.TabBarBloc>().add(bloc.SwitchTabEvent(index));
-              },
-              type: BottomNavigationBarType.fixed,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Главная',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.category),
-                  label: 'Каталог',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
-                  label: 'Поиск',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart),
-                  label: 'Корзина',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Профиль',
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  int _currentIndex = 0;
+
+  void _onSectionSelected(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
   }
 
-  Widget _buildTabContent(int index) {
-    switch (index) {
-      case 0:
-        // Главная (StoreView) без дополнительного заголовка
-        return const StoreView();
-      case 1:
-        // Каталог (CatalogView) с заголовком
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Каталог'),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          const StoreView(), // Главная
+          CatalogView(onSectionSelected: _onSectionSelected), // Каталог
+          const SearchView(), // Поиск
+          const CartView(), // Корзина
+          const ProfileView(), // Профиль
+          Scaffold(
+            appBar: AppBar(
+              title: const Text('Канализация'),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  _onSectionSelected(1); // Вернуться к каталогу
+                },
+              ),
+            ),
+            body: const SewerageView(), // Экран "Канализация"
           ),
-          body: const CatalogView(),
-        );
-      case 2:
-        // Поиск (SearchView) с заголовком
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Поиск'),
-          ),
-          body: const SearchView(),
-        );
-      case 3:
-        // Корзина (CartView) с заголовком
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Корзина'),
-          ),
-          body: const CartView(),
-        );
-      case 4:
-        // Профиль (ProfileView) с заголовком
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Профиль'),
-          ),
-          body: const ProfileView(),
-        );
-      default:
-        return const StoreView();
-    }
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex < 5
+            ? _currentIndex
+            : 1, // "Канализация" относится к "Каталогу"
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
+          BottomNavigationBarItem(icon: Icon(Icons.category), label: 'Каталог'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Поиск'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart), label: 'Корзина'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Профиль'),
+        ],
+      ),
+    );
   }
 }

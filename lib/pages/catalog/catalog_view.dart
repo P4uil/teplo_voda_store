@@ -1,58 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:teplo_voda_store/pages/catalog/bloc/catalog_bloc.dart';
 
 class CatalogView extends StatelessWidget {
-  const CatalogView({super.key});
+  final Function(int) onSectionSelected;
+
+  const CatalogView({super.key, required this.onSectionSelected});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CatalogBloc, CatalogState>(
-      builder: (context, state) {
-        if (state is CatalogInitial) {
-          return Scaffold(
-            body: ListView(
-              padding: const EdgeInsets.all(16.0),
-              children: [
-                ListTile(
-                  title: const Text('Канализация'),
-                  onTap: () {
-                    context
-                        .read<CatalogBloc>()
-                        .add(SelectCatalogSectionEvent('Канализация'));
-                  },
-                ),
-                ListTile(
-                  title: const Text('Задвижки'),
-                  onTap: () {
-                    context
-                        .read<CatalogBloc>()
-                        .add(SelectCatalogSectionEvent('Задвижки'));
-                  },
-                ),
-                // Добавьте остальные разделы...
-              ],
-            ),
-          );
-        } else if (state is CatalogSectionContent) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  context.read<CatalogBloc>().add(BackToCatalogEvent());
-                },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Каталог'),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        itemCount: 1, // Укажите количество элементов списка
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
+            child: ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              title: Text(state.sectionTitle),
-            ),
-            body: Center(
-              child: Text('Содержимое раздела: ${state.sectionTitle}'),
+              tileColor: Colors.grey[200],
+              title: const Text(
+                'Канализация',
+                style: TextStyle(fontSize: 16),
+              ),
+              trailing: const Icon(Icons.arrow_forward),
+              onTap: () {
+                onSectionSelected(5); // Переход к экрану "Канализация"
+              },
             ),
           );
-        } else {
-          return const Center(child: Text('Ошибка загрузки каталога'));
-        }
-      },
+        },
+      ),
     );
   }
 }

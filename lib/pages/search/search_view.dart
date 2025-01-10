@@ -6,6 +6,9 @@ class SearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Поиск'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -22,13 +25,19 @@ class SearchView extends StatelessWidget {
                 children: [
                   Icon(Icons.search, color: Colors.grey),
                   SizedBox(width: 8),
-                  Text(
-                    'Поиск',
-                    style: TextStyle(color: Colors.grey),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Введите запрос',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border: InputBorder.none,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
