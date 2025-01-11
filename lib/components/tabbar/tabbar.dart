@@ -8,74 +8,96 @@ import 'package:teplo_voda_store/pages/store/store_view.dart';
 
 import '../../pages/cart/cart_view.dart';
 
-class TabBarBloc extends Bloc<TabBarEvent, TabBarState> {
-  TabBarBloc() : super(TabBarInitial()) {
-    on<SwitchTabEvent>((event, emit) {
-      emit(TabBarState(selectedIndex: event.index));
-    });
-  }
+class TabBarViewWidget extends StatefulWidget {
+  const TabBarViewWidget({super.key});
+
+  @override
+  State<TabBarViewWidget> createState() => _TabBarViewWidgetState();
 }
 
-class TabBarViewWidget extends StatelessWidget {
-  const TabBarViewWidget({super.key});
+class _TabBarViewWidgetState extends State<TabBarViewWidget>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 5, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TabBarBloc(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('TeploVoda'),
-        ),
-        body: BlocBuilder<TabBarBloc, TabBarState>(
-          builder: (context, state) {
-            return IndexedStack(
-              index: state.selectedIndex,
-              children: [
-                const StoreView(),
-                CatalogView(
-                  onSectionSelected: (index) {
-                    context.read<TabBarBloc>().add(SwitchTabEvent(index));
-                  },
-                ),
-                const SearchView(),
-                const CartView(),
-                const ProfileView(),
-              ],
-            );
+        body: BlocListener<TabBarBloc, TabBarState>(
+          listener: (context, state) {
+            _tabController.index = state.selectedIndex;
           },
+          child: BlocBuilder<TabBarBloc, TabBarState>(
+            builder: (context, state) {
+              return TabBarView(
+                controller: _tabController,
+                children: [
+                  const StoreView(),
+                  CatalogView(
+                    onSectionSelected: (index) {
+                      print('Section selected: $index');
+                    },
+                  ),
+                  const SearchView(),
+                  const CartView(),
+                  const ProfileView(),
+                ],
+              );
+            },
+          ),
         ),
-        bottomNavigationBar: BlocBuilder<TabBarBloc, TabBarState>(
-          builder: (context, state) {
-            return BottomNavigationBar(
-              currentIndex: state.selectedIndex,
-              onTap: (index) {
-                context.read<TabBarBloc>().add(SwitchTabEvent(index));
-              },
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Главная',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.category),
-                  label: 'Каталог',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
-                  label: 'Поиск',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart),
-                  label: 'Корзина',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Профиль',
-                ),
-              ],
-            );
-          },
+        bottomNavigationBar: Theme( // Wrap with Theme
+          data: Theme.of(context).copyWith( // Copy existing theme
+            canvasColor: Colors.grey[200], // Set background color here
+          ),
+          child: BlocBuilder<TabBarBloc, TabBarState>(
+            builder: (context, state) {
+              return BottomNavigationBar(
+                selectedItemColor: Colors.blue,
+                unselectedItemColor: Colors.grey,
+                currentIndex: state.selectedIndex,
+                type: BottomNavigationBarType.fixed,
+                onTap: (index) {
+                  context.read<TabBarBloc>().add(SwitchTabEvent(index));
+                },
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'Главная',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.category),
+                    label: 'Каталог',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.search),
+                    label: 'Поиск',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.shopping_cart),
+                    label: 'Корзина',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    label: 'Профиль',
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

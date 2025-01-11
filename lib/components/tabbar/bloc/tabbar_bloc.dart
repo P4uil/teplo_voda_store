@@ -9,8 +9,10 @@ part 'tabbar_state.dart';
 class TabBarBloc extends Bloc<TabBarEvent, TabBarState> {
   TabBarBloc() : super(TabBarInitial()) {
     on<SwitchTabEvent>((event, emit) {
-      // Переключение на выбранный индекс
+      print('SwitchTabEvent received: ${event.index}');
       emit(TabBarState(selectedIndex: event.index));
+      print('TabBarState updated: ${state.selectedIndex}');
     });
   }
 }
+

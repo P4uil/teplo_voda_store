@@ -53,10 +53,6 @@ class _StoreViewState extends State<StoreView> {
             child: InkWell(
               onTap: () {
                 context.read<TabBarBloc>().add(SwitchTabEvent(2));
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchView()),
-                );
               },
               child: Container(
                 padding:
