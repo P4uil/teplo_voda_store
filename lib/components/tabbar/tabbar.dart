@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teplo_voda_store/components/tabbar/bloc/tabbar_bloc.dart';
 import 'package:teplo_voda_store/pages/profile/profile_view.dart';
 import 'package:teplo_voda_store/pages/store/store_view.dart';
+import 'package:teplo_voda_store/pages/sewer/sewer_view.dart';
 import '../../pages/cart/cart_view.dart';
 
 class TabBarViewWidget extends StatefulWidget {
@@ -38,11 +39,19 @@ class _TabBarViewWidgetState extends State<TabBarViewWidget> {
           },
           child: PageView(
             controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(), // Отключить свайпы
-            children: const [
-              StoreView(),
-              CartView(),
-              ProfileView(),
+            physics: const NeverScrollableScrollPhysics(), // Disable swiping
+            children: [
+              StoreView(onSectionSelected: (index) {
+                if (index == 3) {
+                  // Assuming index 3 is for "Канализация"
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SewerView()),
+                  );
+                }
+              }),
+              const CartView(),
+              const ProfileView(),
             ],
           ),
         ),
@@ -63,7 +72,7 @@ class _TabBarViewWidgetState extends State<TabBarViewWidget> {
                 items: const [
                   BottomNavigationBarItem(
                     icon: Icon(Icons.home),
-                    label: 'Главная',
+                    label: 'Магазин',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.shopping_cart),

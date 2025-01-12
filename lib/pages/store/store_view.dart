@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:teplo_voda_store/components/tabbar/bloc/tabbar_bloc.dart';
-import 'package:teplo_voda_store/pages/catalog/bloc/catalog_bloc.dart';
+import 'package:teplo_voda_store/pages/sewer/sewer_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class StoreView extends StatefulWidget {
-  const StoreView({super.key});
+class StoreView extends StatelessWidget {
+  final Function(int) onSectionSelected;
 
-  @override
-  _StoreViewState createState() => _StoreViewState();
-}
+  const StoreView({super.key, required this.onSectionSelected});
 
-class _StoreViewState extends State<StoreView> {
-  final List<Map<String, String>> sections = [
+  static const List<Map<String, String>> sections = [
     {'title': 'Канализация', 'icon': 'assets/icons/na.png'},
-    {'title': 'Задвижки', 'icon': 'assets/icons/na.png'},
-    // Добавьте остальные разделы...
+    // Add other sections...
   ];
 
   @override
@@ -51,7 +45,7 @@ class _StoreViewState extends State<StoreView> {
             padding: const EdgeInsets.all(16.0),
             child: InkWell(
               onTap: () {
-                // context.read<TabBarBloc>().add(SwitchTabEvent(2)); //! old functional do not delete
+                // Implement search functionality here
               },
               child: Container(
                 padding:
@@ -74,12 +68,12 @@ class _StoreViewState extends State<StoreView> {
               ),
             ),
           ),
-          // Плашка "Заказать по телефону"
+          // "Order by phone" banner
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: InkWell(
               onTap: () {
-                // Открыть выезжающее окно
+                // Open a modal bottom sheet
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -139,7 +133,7 @@ class _StoreViewState extends State<StoreView> {
               ),
             ),
           ),
-          // Сетка разделов
+          // Sections grid
           Expanded(
             child: GridView.builder(
               padding: const EdgeInsets.all(16.0),
@@ -155,10 +149,14 @@ class _StoreViewState extends State<StoreView> {
                 return InkWell(
                   onTap: () {
                     final title = section['title'];
-                    context.read<TabBarBloc>().add(SwitchTabEvent(1));
-                    context
-                        .read<CatalogBloc>()
-                        .add(SelectCatalogSectionEvent(title!));
+                    if (title == 'Канализация') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SewerView()),
+                      );
+                    }
+                    // Implement other section navigation here
                   },
                   child: Column(
                     children: [
