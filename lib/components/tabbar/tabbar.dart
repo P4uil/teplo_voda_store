@@ -5,7 +5,6 @@ import 'package:teplo_voda_store/pages/catalog/catalog_view.dart';
 import 'package:teplo_voda_store/pages/profile/profile_view.dart';
 import 'package:teplo_voda_store/pages/search/search_view.dart';
 import 'package:teplo_voda_store/pages/store/store_view.dart';
-
 import '../../pages/cart/cart_view.dart';
 
 class TabBarViewWidget extends StatefulWidget {
@@ -15,19 +14,18 @@ class TabBarViewWidget extends StatefulWidget {
   State<TabBarViewWidget> createState() => _TabBarViewWidgetState();
 }
 
-class _TabBarViewWidgetState extends State<TabBarViewWidget>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _TabBarViewWidgetState extends State<TabBarViewWidget> {
+  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _pageController = PageController();
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -38,30 +36,27 @@ class _TabBarViewWidgetState extends State<TabBarViewWidget>
       child: Scaffold(
         body: BlocListener<TabBarBloc, TabBarState>(
           listener: (context, state) {
-            _tabController.index = state.selectedIndex;
+            _pageController.jumpToPage(state.selectedIndex);
           },
-          child: BlocBuilder<TabBarBloc, TabBarState>(
-            builder: (context, state) {
-              return TabBarView(
-                controller: _tabController,
-                children: [
-                  const StoreView(),
-                  CatalogView(
-                    onSectionSelected: (index) {
-                      print('Section selected: $index');
-                    },
-                  ),
-                  const SearchView(),
-                  const CartView(),
-                  const ProfileView(),
-                ],
-              );
-            },
+          child: PageView(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(), // Отключить свайпы
+            children: [
+              const StoreView(),
+              CatalogView(
+                onSectionSelected: (index) {
+                  print('Section selected: $index');
+                },
+              ),
+              const SearchView(),
+              const CartView(),
+              const ProfileView(),
+            ],
           ),
         ),
-        bottomNavigationBar: Theme( // Wrap with Theme
-          data: Theme.of(context).copyWith( // Copy existing theme
-            canvasColor: Colors.grey[200], // Set background color here
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Colors.grey[200],
           ),
           child: BlocBuilder<TabBarBloc, TabBarState>(
             builder: (context, state) {

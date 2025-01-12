@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teplo_voda_store/components/tabbar/bloc/tabbar_bloc.dart';
 import 'package:teplo_voda_store/pages/catalog/bloc/catalog_bloc.dart';
-import 'package:teplo_voda_store/pages/search/search_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StoreView extends StatefulWidget {
