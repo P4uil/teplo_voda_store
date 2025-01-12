@@ -51,7 +51,7 @@ class _StoreViewState extends State<StoreView> {
             padding: const EdgeInsets.all(16.0),
             child: InkWell(
               onTap: () {
-                context.read<TabBarBloc>().add(SwitchTabEvent(2));
+                // context.read<TabBarBloc>().add(SwitchTabEvent(2)); //! old functional do not delete
               },
               child: Container(
                 padding:

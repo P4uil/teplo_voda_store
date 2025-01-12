@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teplo_voda_store/components/tabbar/bloc/tabbar_bloc.dart';
-import 'package:teplo_voda_store/pages/catalog/catalog_view.dart';
 import 'package:teplo_voda_store/pages/profile/profile_view.dart';
-import 'package:teplo_voda_store/pages/search/search_view.dart';
 import 'package:teplo_voda_store/pages/store/store_view.dart';
 import '../../pages/cart/cart_view.dart';
 
@@ -41,16 +39,10 @@ class _TabBarViewWidgetState extends State<TabBarViewWidget> {
           child: PageView(
             controller: _pageController,
             physics: const NeverScrollableScrollPhysics(), // Отключить свайпы
-            children: [
-              const StoreView(),
-              CatalogView(
-                onSectionSelected: (index) {
-                  print('Section selected: $index');
-                },
-              ),
-              const SearchView(),
-              const CartView(),
-              const ProfileView(),
+            children: const [
+              StoreView(),
+              CartView(),
+              ProfileView(),
             ],
           ),
         ),
@@ -72,14 +64,6 @@ class _TabBarViewWidgetState extends State<TabBarViewWidget> {
                   BottomNavigationBarItem(
                     icon: Icon(Icons.home),
                     label: 'Главная',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.category),
-                    label: 'Каталог',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.search),
-                    label: 'Поиск',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.shopping_cart),
