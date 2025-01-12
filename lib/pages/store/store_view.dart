@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teplo_voda_store/pages/sewer/sewer_view.dart';
+import 'package:teplo_voda_store/pages/cart/cart_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StoreView extends StatelessWidget {
@@ -38,6 +39,7 @@ class StoreView extends StatelessWidget {
             ),
           ],
         ),
+        // Removed actions with cart button
       ),
       body: Column(
         children: [

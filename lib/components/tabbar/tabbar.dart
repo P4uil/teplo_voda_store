@@ -68,6 +68,7 @@ class _TabBarViewWidgetState extends State<TabBarViewWidget> {
                 type: BottomNavigationBarType.fixed,
                 onTap: (index) {
                   context.read<TabBarBloc>().add(SwitchTabEvent(index));
+                  _pageController.jumpToPage(index);
                 },
                 items: const [
                   BottomNavigationBarItem(
